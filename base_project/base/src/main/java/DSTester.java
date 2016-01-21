@@ -131,12 +131,12 @@ public class DSTester {
 
 /////////////////////////////////////////////////////////
     //Make sure this keyname is not in datastore
-    keyname = "dstester2";
+    keyname = "dstester3";
     service.path("rest").path("ds").path(keyname).request().delete();
     //Create a TaskData
     Form form =new Form();
     form.param("keyname", keyname);
-    form.param("keyname","100");
+    form.param("value","100");
     response = service.path("rest").path("ds").request().post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED),Response.class);
 
     // Return code should be 204 == no response
@@ -164,7 +164,8 @@ public class DSTester {
 
 /////////////////////////////////////////////////////////
   private static URI getBaseURI() {
-    return UriBuilder.fromUri("http://localhost:8080/").build();
+    //return UriBuilder.fromUri("http://localhost:8080/").build();
+    return UriBuilder.fromUri("http://cs263-1197.appspot.com/").build();
   }
 } 
 
