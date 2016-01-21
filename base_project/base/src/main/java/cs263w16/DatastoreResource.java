@@ -80,6 +80,7 @@ public class DatastoreResource {
     taskData.setProperty("value", value); 
     taskData.setProperty("date",new Date());
     datastore.put(taskData);
+    syncCache.put(keyname, value);
     servletResponse.sendRedirect("/done.html");
   }
 
