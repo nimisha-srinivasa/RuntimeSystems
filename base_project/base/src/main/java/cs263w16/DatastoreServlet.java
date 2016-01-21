@@ -22,8 +22,8 @@ public class DatastoreServlet extends HttpServlet {
 
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       // Using the synchronous cache.
-	  MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
-	  syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+	   MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	   syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 
       //display every element of kind TaskData for /datastore
       if(req.getParameterMap().isEmpty()){
@@ -76,8 +76,8 @@ public class DatastoreServlet extends HttpServlet {
       	Entity tne = new Entity("TaskData",keyname);
       	tne.setProperty("value", value); 
       	tne.setProperty("date",new Date());
-		datastore.put(tne);
-		syncCache.put(keyname, value); // Populate cache.
+    		datastore.put(tne);
+    		syncCache.put(keyname, value); // Populate cache.
       	resp.getWriter().println("<h2>Stored "+keyname+" and "+value+" in Datastore and Memcache</h2>");
       }
 
