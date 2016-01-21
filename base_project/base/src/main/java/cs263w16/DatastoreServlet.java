@@ -21,39 +21,64 @@ public class DatastoreServlet extends HttpServlet {
       String value = req.getParameter("value");
 
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      // Using the synchronous cache.
+	  MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	  syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 
-      //display every element of kind TaskData
-      if(keyname==null && value==null){
+      //display every element of kind TaskData for /datastore
+      if(req.getParameterMap().isEmpty()){
+      	//querying from datastore
+      	resp.getWriter().println("<h3>Datastore results:</h3>");
+      	List<String> listOfKeys=new ArrayList<String>();
       	Query q = new Query("TaskData");
       	PreparedQuery pq = datastore.prepare(q);  
       	for (Entity result : pq.asIterable()) {   
-		       String taskData_value = (String) result.getProperty("value");   
-		       Date taskData_date = (Date) result.getProperty("date"); 
-		       resp.getWriter().println("<p>value = "+taskData_value+" <br/> date = "+taskData_date.toString()+"</p>");
+      		String datastore_key = result.getKey().getName();
+		    String taskData_value = (String) result.getProperty("value");   
+		    Date taskData_date = (Date) result.getProperty("date"); 
+		    resp.getWriter().println("<p>keyname = "+datastore_key+"  value = "+taskData_value+" date = "+taskData_date.toString()+"</p>");
+		    listOfKeys.add(datastore_key);
+		}
+		//check which of the keys exist in memcache
+		String memcache_value;
+		resp.getWriter().println("<h3>Memcache results:</h3>");
+		for(String datastore_key: listOfKeys){
+			memcache_value = (String) syncCache.get(datastore_key);
+			if(memcache_value!=null){
+				//String decoded = new String(memcache_value, "UTF-8");
+				resp.getWriter().println("<p>keyname = "+datastore_key+" value = "+memcache_value+"</p>");
+			}
 		}
       }
 
       //display element of kind TaskData with key=keyname
       else if(keyname!=null && value==null){
-      	Key task_key = KeyFactory.createKey("TaskData", keyname);
-      	try{
-      		Entity tne = datastore.get(task_key);
-      		String tne_value = (String) tne.getProperty("value");
-    		Date tne_date = (Date) tne.getProperty("date");
-    		resp.getWriter().println("<h2>value = "+tne_value+" <br/> date = "+tne_date.toString()+"</h2>");
-      	}catch(EntityNotFoundException e){
-      		resp.getWriter().println("<h2>Entity does not exist</h2>");
-      	}
-      }
+
+      	//first check in the cache
+      	String memcache_value = (String) syncCache.get(keyname); // Read from cache.
+      	// Get value from datastore
+	    Key task_key = KeyFactory.createKey("TaskData", keyname);
+	    try{
+	      	Entity tne = datastore.get(task_key);
+	      	if(memcache_value==null){
+	      		resp.getWriter().println("<h2>Datastore</h2>");
+	      	}else{
+	      		resp.getWriter().println("<h2>Both</h2>");
+	      	}
+		    
+	    }catch(EntityNotFoundException e){
+	      	resp.getWriter().println("<h2>Neither</h2>");
+	    }
+  	}
 
       //store element of kind TaskData with key=keyname and value=value
       else if(keyname!=null && value!=null){
       	Entity tne = new Entity("TaskData",keyname);
       	tne.setProperty("value", value); 
       	tne.setProperty("date",new Date());
-      	
 		datastore.put(tne);
-      	resp.getWriter().println("<h2>Stored "+keyname+" and "+value+" in Datastore</h2>");
+		syncCache.put(keyname, value); // Populate cache.
+      	resp.getWriter().println("<h2>Stored "+keyname+" and "+value+" in Datastore and Memcache</h2>");
       }
 
       else{
