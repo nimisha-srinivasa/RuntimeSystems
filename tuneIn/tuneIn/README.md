@@ -2,11 +2,11 @@
 ## The one stop for sharing and listening to audio
 
 **TuneIn** is a web-app that lets you:
--Record and share audio clips with friends. 
--Comment and like your friends' audio clips on listening to them.
--Upload audio clips on Google Drive.
--Sign in using google or facebook account.
--Lets you share audio clips on your facebook timeline. 
+ - Record and share audio clips with friends. 
+ - Comment and like your friends' audio clips on listening to them.
+ - Upload audio clips on Google Drive.
+ - Sign in using google or facebook account.
+ - Lets you share audio clips on your facebook timeline. 
 
 ## Developers
 
