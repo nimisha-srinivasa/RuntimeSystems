@@ -11,6 +11,12 @@
 ## Developers
 
 ### Nimisha Srinivasa
-![Nimisha Srinivasa](https://www.cs.ucsb.edu/sites/cs.ucsb.edu/files/styles/portrait-full/public/images/graduate/srinivasa_nimisha.jpg?itok=iBqjmdsU&c=a842d952e919e4d342b2796cd76eb97d)
+![Nimisha Srinivasa](https://github.com/nimisha-srinivasa/cs263/blob/master/tuneIn/tuneIn/src/main/webapp/img/Nimisha_Srinivasa.jpg)
+
+## Deployment
 
 The webapp is deployed in this address: http://tune-in-1205.appspot.com/
+
+## Trackers
+
+**[PivotalTracker](https://www.pivotaltracker.com/n/projects/1530979)**
