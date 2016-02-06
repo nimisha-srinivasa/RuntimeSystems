@@ -7,3 +7,5 @@ base_project/base/.classpath
 base_project/base/.project
 base_project/base/src/main/java/META-INF/persistence.xml
 tuneIn/tuneIn/target/
+tuneIn/tuneIn/bin/
+tuneIn/tuneIn/.project

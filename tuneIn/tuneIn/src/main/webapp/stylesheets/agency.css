@@ -855,7 +855,7 @@ h1{border-bottom:5px solid #fed136;}
 	height: 50%;
 }
 
-.explore img{
+.explore .img-responsive img{
 	margin:auto;
 	height:250px;
 	width:250px;

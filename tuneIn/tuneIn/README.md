@@ -11,7 +11,7 @@
 ## Developers
 
 ### Nimisha Srinivasa
-![Nimisha Srinivasa](https://github.com/nimisha-srinivasa/cs263/blob/master/tuneIn/tuneIn/src/main/webapp/img/Nimisha_Srinivasa.jpg)
+<img src="https://github.com/nimisha-srinivasa/cs263/raw/master/tuneIn/tuneIn/src/main/webapp/img/Nimisha_Srinivasa.jpg" alt="Nimisha Srinivasa" style="max-width: 410px;">
 
 ## Deployment
 
