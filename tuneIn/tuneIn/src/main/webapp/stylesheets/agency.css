@@ -708,7 +708,7 @@ ul.social-buttons li a:hover,ul.social-buttons li a:focus,ul.social-buttons li a
 	border: 0;
 	border-radius: 0;
 	box-shadow: none;
-	min-height: 100%;
+	min-height: 40%; 
 	padding: 100px 0;
 	text-align: center;
 	webkit-box-shadow: none;
@@ -837,3 +837,26 @@ body
     color: #fff;}
 #modal-launcher{margin: 30% 0 0 30%; }
 h1{border-bottom:5px solid #fed136;}
+.audio-modal{
+    width:100%;
+    padding-bottom:20px;
+    text-align: center;
+}
+.audio-modal .modal-header{
+	text-align: center;
+}
+.audio-modal a{
+	float: right;
+	cursor: pointer;
+	color: #808080;
+	text-align: right;
+}
+.portfolio-img{
+	height: 50%;
+}
+
+.explore img{
+	margin:auto;
+	height:250px;
+	width:250px;
+}
