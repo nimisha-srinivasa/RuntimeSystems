@@ -9,6 +9,13 @@ public class User {
 	private String userName;
 	private String emailId;
 	private String password;
+	private List<AudioClip> audioClipList;
+	
+	public User(){
+		audioClipList = new ArrayList<AudioClip>();
+	}
+	
+	
 	public String getUserId() {
 		return userId;
 	}
@@ -32,6 +39,20 @@ public class User {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+
+	public List<AudioClip> getAudioClipList() {
+		return audioClipList;
+	}
+
+
+	public void setAudioClipList(List<AudioClip> audioClipList) {
+		this.audioClipList = audioClipList;
+	}
+	
+	public void addAudioClipList(AudioClip audioClip){
+		this.audioClipList.add(audioClip);
 	}
 	
 }
