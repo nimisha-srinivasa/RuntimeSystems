@@ -1,3 +1,4 @@
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
@@ -461,7 +462,6 @@
                         <%
                             }
                             else{
-
                         %>
                         <p class="item-intro text-muted">By Guest</p>
                         <%

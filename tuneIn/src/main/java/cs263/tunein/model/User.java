@@ -1,4 +1,4 @@
-package tunein.model;
+package cs263.tunein.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.*;
