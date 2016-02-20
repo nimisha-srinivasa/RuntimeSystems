@@ -9,27 +9,21 @@ import com.google.appengine.api.blobstore.*;
 @XmlRootElement
 // JAX-RS supports an automatic mapping from JAXB annotated class to XML and JSON
 public class AudioClip {
-  private Key audioClipId;
   private String title;
-  private String ownerId;
+  private Key ownerId;
   private BlobKey audio; //changing to blob in future
   private BlobKey image;
   private Date date;
 
   
-  public AudioClip(Key audioClipId, String title, Date date){
-  	this.audioClipId = audioClipId;
+  public AudioClip(String title, Key ownerId, BlobKey audio, BlobKey image, Date date){
   	this.title = title;
+  	this.ownerId = ownerId;
+  	this.audio = audio;
+  	this.image = image;
   	this.date = date;
   }
 
-	public Key getAudioClipId() {
-		return audioClipId;
-	}
-	
-	public void setAudioClipId(Key id) {
-		this.audioClipId = id;
-	}
 	
 	public String getTitle() {
 		return title;
@@ -39,11 +33,11 @@ public class AudioClip {
 		this.title = title;
 	}
 	
-	public String getOwnerId() {
+	public Key getOwnerId() {
 		return ownerId;
 	}
 	
-	public void setOwnerId(String ownerId) {
+	public void setOwnerId(Key ownerId) {
 		this.ownerId = ownerId;
 	}
 	
