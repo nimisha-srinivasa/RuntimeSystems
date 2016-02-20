@@ -8,11 +8,8 @@
 <html>
   <body>
     <p>Upload an audio</p>
-    <form action="<%= blobstoreService.createUploadUrl("/audio") %>" method="post" enctype="multipart/form-data">
-      <label>Key:</label> <input type="text" name="keyname">
-      <label> Titke:</label>
-      <input type="text" name="title">
-      <label> Audio:</label><input type="file" name="audio">
+    <form action="<%= blobstoreService.createUploadUrl("/rest/audio") %>" method="POST" enctype="multipart/form-data">
+      <label> Audio:</label><input type="file" name="myAudio">
       <input type="submit">
     </form>
   </body>
