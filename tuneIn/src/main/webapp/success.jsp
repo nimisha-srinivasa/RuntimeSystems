@@ -12,20 +12,21 @@ $.urlParam = function(name){
 
 $(document).ready(function(){
     audioclip_key = $.urlParam('audioclip_key');
-    audio_url="http://"+window.location.host+"/rest/audioClip/"+audioclip_key;
-    $('body').append(audio_url);
+    audioClip_url="http://"+window.location.host+"/rest/audioClip/"+audioclip_key;
+    $('body').append(audioClip_url);
      $.ajax({
-            url: audio_url,
+            url: audioClip_url,
             type: "GET",
             crossDomain: true,
             dataType: "json",
             success: function (data) {
-            	
-                $('#myTable').append('<tr><td>' + data.title + '</td><td>');
-		        $('#myTable').append('<tr><td>' + data.ownerId + '</td><td>');
-		        $('#myTable').append('<tr><td>' + data.audio + '</td><td>');
-		        $('#myTable').append('<tr><td>' + data.image + '</td><td>');
-		        $('#myTable').append('<tr><td>' + data.date + '</td><td>');
+            	image_url = audioClip_url+"/image?blobkey="+data.image;
+            	audio_url = audioClip_url+"/audio?blobkey="+data.audio;
+                $('#myTable').append('<tr><td>' + data.title + '</td></tr>');
+		        $('#myTable').append('<tr><td>' + data.ownerId + '</td></tr>');
+		        $('#myTable').append('<tr><td><audio controls> <source src=\"'+audio_url+'\" type="audio/mpeg" /></audio></td></tr>');
+		        $('#myTable').append('<tr><td> 	<img src=\"'+image_url+'\" /> </td></tr>');
+		        $('#myTable').append('<tr><td>' + data.date + '</td></tr>');
 	            },
             error: function (xhr, status) {
                 alert("error");

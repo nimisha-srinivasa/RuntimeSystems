@@ -37,17 +37,15 @@ public class AudioResource {
   public AudioClip getAudioClip(
     @PathParam("id") String id) throws IOException{
       //return an audio object
-    System.out.println("came to get function with "+id);
     try{
       Key audio_key=KeyFactory.stringToKey(id);
       Entity result = datastore.get(audio_key);
-      System.out.println("got it from datastore");
-      AudioClip audioClip = new AudioClip((String)result.getProperty("title"), (Key)result.getProperty("ownerId"), (BlobKey)result.getProperty("audio"), (BlobKey)result.getProperty("image"), (Date)result.getProperty("date"));
-      System.out.println(audioClip.toString());
+      AudioClip audioClip = new AudioClip(id,(String)result.getProperty("title"), (String)result.getProperty("ownerId"), (String)result.getProperty("audio"), (String)result.getProperty("image"), (Date)result.getProperty("date"));
+      /*System.out.println(audioClip.toString());
       System.out.println(audioClip.getTitle());
       System.out.println(audioClip.getAudio());
       System.out.println(audioClip.getImage());
-      System.out.println(audioClip.getDate().toString());
+      System.out.println(audioClip.getDate().toString());*/
 
       return audioClip;
     }
@@ -87,8 +85,8 @@ public class AudioResource {
       BlobKey image_blobKey = blobs.get("myImage");
       Entity audioClip = new Entity("AudioClip");
       audioClip.setProperty("title",request.getParameter("title"));
-      audioClip.setProperty("audio",audio_blobKey);
-      audioClip.setProperty("image",image_blobKey);
+      audioClip.setProperty("audio", audio_blobKey.getKeyString());
+      audioClip.setProperty("image", image_blobKey.getKeyString());
       if(userService.getCurrentUser()!=null){
         audioClip.setProperty("ownerId",userService.getCurrentUser().getUserId());
       }else{
