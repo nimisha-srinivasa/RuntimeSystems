@@ -15,7 +15,10 @@ public class AudioClip {
   private BlobKey image;
   private Date date;
 
-  
+  public AudioClip(){
+
+  }
+
   public AudioClip(String title, Key ownerId, BlobKey audio, BlobKey image, Date date){
   	this.title = title;
   	this.ownerId = ownerId;
@@ -64,8 +67,5 @@ public class AudioClip {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-
-	
-
   
 } 
