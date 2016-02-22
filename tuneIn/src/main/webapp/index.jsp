@@ -3,8 +3,17 @@
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory" %>
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreService" %>
 <%@ page import="java.util.List" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    UserService userService = UserServiceFactory.getUserService();
+    User user = userService.getCurrentUser();
+    if (user != null) 
+        pageContext.setAttribute("user", user);
+%>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -23,12 +32,36 @@
         <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
         <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
         <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <%
+            if (user != null) {
+         %>
+        <script type = "text/javascript">
+                $(document).ready(function(){
+                    basic_url="http://"+window.location.host+"/rest/audioClip";
+                     $.ajax({
+                            url: basic_url+"/byUser",
+                            type: "GET",
+                            crossDomain: true,
+                            dataType: "json",
+                            success: function (data) {
+                                $.each(data, function(i, item) {
+                                    image_url = basic_url+"/image?blobkey="+item.image;
+                                    audio_url = basic_url+"/audio?blobkey="+item.audio;
+                                    $("#myPrevWork").append("<li> <div class=\"timeline-image\"><img class=\"img-circle img-responsive\" src=\""+image_url+"\" alt=\"\"></div><div class=\"timeline-panel\"><div class=\"timeline-heading\"><h4>"+item.date+"</h4><h4 class=\"subheading\">"+item.title+"</h4></div><div class=\"timeline-body\"><p class=\"text-muted\"><audio controls> <source src=\""+audio_url+"\" type=\"audio/mpeg\" /></audio></p></div></div></li>");
+                                });
+                            },
+                            error: function (xhr, status) {
+                                alert("error");
+                            }
+                        });
+                });
+        </script>
+        <%
+            }
+        %>
+
+
     </head>
     <body id="page-top" class="index">
         <!-- Navigation -->
@@ -51,10 +84,7 @@
                             <a href="#page-top"></a>
                         </li>
                         <%
-                            UserService userService = UserServiceFactory.getUserService();
-                            User user = userService.getCurrentUser();
                             if (user != null) {
-                                pageContext.setAttribute("user", user);
                         %>
                         <li>
                             <a class="page-scroll" href="#services">Create</a>
@@ -62,6 +92,7 @@
                         <li>
                             <a class="page-scroll" href="#portfolio">Explore</a>
                         </li>
+                        
                         <li>
                             <a class="page-scroll" href="#about"><%= user.getNickname() %></a>
                         </li>
@@ -279,13 +310,13 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12 text-center">
-                        <h2 class="section-heading">About</h2>
-                        <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                        <h2 class="section-heading">Your Previous Creations</h2>
+                        <h3 class="section-subheading text-muted">This is the awesome work you did before!</h3>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-12">
-                        <ul class="timeline">
+                    <div class="col-lg-12" >
+                        <ul class="timeline" id="myPrevWork">
                             <li>
                                 <div class="timeline-image">
                                     <img class="img-circle img-responsive" src="img/about/1.jpg" alt="">
@@ -300,7 +331,7 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="timeline-inverted">
+                            <!--<li class="timeline-inverted">
                                 <div class="timeline-image">
                                     <img class="img-circle img-responsive" src="img/about/2.jpg" alt="">
                                 </div>
@@ -349,7 +380,7 @@
                                         <br>Story!
                                     </h4>
                                 </div>
-                            </li>
+                            </li>-->
                         </ul>
                     </div>
                 </div>
@@ -475,10 +506,20 @@
                         <br/>
                         <br/>
                         </div>
+                        <form action="<%= blobstoreService.createUploadUrl("/rest/audioClip") %>" method="POST" enctype="multipart/form-data">
                         <div>
-                        <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> Save Audio</button>
+                            <label> title:</label><input type="text" name="title">
+                        </div>
+                        <div>
+                            <label> Image:</label><input type="file" name="myImage">
+                        </div>
+                        <div>
+                            <label> Audio:</label><input type="file" name="myAudio">
+                        </div>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save Audio</button>
                         <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
                         </div>
+                        </form>
                         <br/>
                         <br/>
                     </div>

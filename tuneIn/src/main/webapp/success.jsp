@@ -13,6 +13,7 @@ $.urlParam = function(name){
 $(document).ready(function(){
     audioclip_key = $.urlParam('audioclip_key');
     audioClip_url="http://"+window.location.host+"/rest/audioClip/"+audioclip_key;
+    basic_url="http://"+window.location.host+"/rest/audioClip";
     $('body').append(audioClip_url);
      $.ajax({
             url: audioClip_url,
@@ -20,8 +21,9 @@ $(document).ready(function(){
             crossDomain: true,
             dataType: "json",
             success: function (data) {
-            	image_url = audioClip_url+"/image?blobkey="+data.image;
-            	audio_url = audioClip_url+"/audio?blobkey="+data.audio;
+            	image_url = basic_url+"/image?blobkey="+data.image;
+            	audio_url = basic_url+"/audio?blobkey="+data.audio;
+                alert(image_url+"\n"+audio_url);
                 $('#myTable').append('<tr><td>' + data.title + '</td></tr>');
 		        $('#myTable').append('<tr><td>' + data.ownerId + '</td></tr>');
 		        $('#myTable').append('<tr><td><audio controls> <source src=\"'+audio_url+'\" type="audio/mpeg" /></audio></td></tr>');
