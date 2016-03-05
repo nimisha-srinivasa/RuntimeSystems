@@ -14,10 +14,11 @@ hello.on('auth.login', function(auth) {
     // Call user information, for the given network
     hello(auth.network).api('/me').then(function(r) {
         //do something
+        user=r;
+        window.location = "index2.jsp";
     });
 });
+
 function login(){
-	alert("logging in");
-	hello('google').login();
-	window.location = "index.html";
+	hello('google').login();    
 }

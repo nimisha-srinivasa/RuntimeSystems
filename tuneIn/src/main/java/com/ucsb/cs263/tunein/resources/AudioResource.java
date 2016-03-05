@@ -1,4 +1,4 @@
-package cs263.tunein.resources;
+package com.ucsb.cs263.tunein.resources;
 
 import java.io.*;
 import java.util.*;
@@ -13,14 +13,12 @@ import javax.xml.bind.JAXBElement;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import com.google.appengine.api.datastore.*;
-import com.google.appengine.api.datastore.Query.Filter;
-import com.google.appengine.api.datastore.Query.FilterPredicate;
-import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.*;
 import com.google.appengine.api.blobstore.*;
 import com.google.appengine.api.memcache.*;
 import com.google.appengine.api.users.*;
 
-import cs263.tunein.model.*;
+import com.ucsb.cs263.tunein.model.*;
 
 @Path("/audioClip")
 public class AudioResource {
@@ -31,8 +29,7 @@ public class AudioResource {
 
   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-  UserService userService = UserServiceFactory.getUserService();
-  
+
   @GET
   @Path("/{id}")
   @Produces(MediaType.APPLICATION_JSON )
@@ -49,31 +46,22 @@ public class AudioResource {
       throw new RuntimeException("Get: audioClip with " + id +  " not found");
     }
   }
-
+  
   @GET
   @Path("/byUser")
   @Produces(MediaType.APPLICATION_JSON )
-  public List<AudioClip> getAudioClipsByUser() throws IOException{
+  public List<AudioClip> getAudioClipsByUser(@QueryParam("userId") String userId) throws IOException{
     List<AudioClip> audioClipList=new ArrayList<AudioClip>();
-    String id = null;
-    if(userService.getCurrentUser()!=null){
-        id = userService.getCurrentUser().getUserId();
-        System.out.println("Came to get byUser "+id);
-        /*Key user_id=KeyFactory.stringToKey(id);
-        System.out.println("user key is  "+user_id);*/
-        Filter userFilter = new FilterPredicate("ownerId", FilterOperator.EQUAL, id);
-        Query q = new Query("AudioClip").setFilter(userFilter);
-        //fetch all for now!
-        //Query q = new Query("AudioClip");
-        PreparedQuery pq = datastore.prepare(q);
+    Filter userFilter = new FilterPredicate("ownerId", FilterOperator.EQUAL, userId);
+    //Query q = new Query("AudioClip").setFilter(userFilter).addSort("date", SortDirection.ASCENDING);
+    Query q = new Query("AudioClip").setFilter(userFilter);
+    PreparedQuery pq = datastore.prepare(q);
 
-        AudioClip audioClip;
-        for (Entity result : pq.asIterable()) {
-          audioClip = new AudioClip(id,(String)result.getProperty("title"), (String)result.getProperty("ownerId"), (String)result.getProperty("audio"), (String)result.getProperty("image"), (Date)result.getProperty("date"));
-          audioClipList.add(audioClip);
-        }
+    AudioClip audioClip;
+    for (Entity result : pq.asIterable()) {
+      audioClip = new AudioClip(KeyFactory.keyToString(result.getKey()),(String)result.getProperty("title"), (String)result.getProperty("ownerId"), (String)result.getProperty("audio"), (String)result.getProperty("image"), (Date)result.getProperty("date"));
+      audioClipList.add(audioClip);
     }
-
     return audioClipList;
     
   }
@@ -110,12 +98,7 @@ public class AudioResource {
       audioClip.setProperty("title",request.getParameter("title"));
       audioClip.setProperty("audio", audio_blobKey.getKeyString());
       audioClip.setProperty("image", image_blobKey.getKeyString());
-      if(userService.getCurrentUser()!=null){
-        //user_key = KeyFactory.stringToKey(userService.getCurrentUser().getUserId());
-        audioClip.setProperty("ownerId", userService.getCurrentUser().getUserId());
-      }else{
-        audioClip.setProperty("ownerId",null);
-      }
+      audioClip.setProperty("ownerId", request.getParameter("userId"));
       audioClip.setProperty("date",new Date());
       datastore.put(audioClip);
       //return Response.seeOther(new URI("/rest/audioClip/"+KeyFactory.keyToString(audioClip.getKey()))).build();

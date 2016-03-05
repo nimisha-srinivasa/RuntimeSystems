@@ -1,3 +1,11 @@
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory" %>
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreService" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+%>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -209,7 +217,7 @@
         </section>
         <!-- About Section -->
         <section id="about">
-            <div class="container">
+            <div class="container" id="usersPrevCreations">
                 <div class="row">
                     <div class="col-lg-12 text-center">
                         <h2 class="section-heading">Your Previous Creations</h2>
@@ -219,20 +227,6 @@
                 <div class="row">
                     <div class="col-lg-12" >
                         <ul class="timeline" id="myPrevWork">
-                            <li>
-                                <div class="timeline-image">
-                                    <img class="img-circle img-responsive" src="img/about/1.jpg" alt="">
-                                </div>
-                                <div class="timeline-panel">
-                                    <div class="timeline-heading">
-                                        <h4>2009-2011</h4>
-                                        <h4 class="subheading">Our Humble Beginnings</h4>
-                                    </div>
-                                    <div class="timeline-body">
-                                        <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
-                                    </div>
-                                </div>
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -276,15 +270,15 @@
                         <a class="audio-modal close-modal" data-dismiss="modal"><i class="fa fa-3x fa-times"></i></a>
                         <h2>Record a Song now!</h2>
                         <div>
-                        <span class="fa-stack fa-4x">
-                            <i class="fa fa-circle fa-stack-2x text-primary" style="color:#E82D2D"></i>
-                            <i class="fa fa-microphone fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <br/>
-                        <br/>
+                            <span class="fa-stack fa-4x">
+                                <i class="fa fa-circle fa-stack-2x text-primary" style="color:#E82D2D"></i>
+                                <i class="fa fa-microphone fa-stack-1x fa-inverse"></i>
+                            </span>
+                            <br/>
+                            <br/>
                         </div>
-                        <div id="uploadAudio">
-                            <form method="POST" enctype="multipart/form-data">
+                        <form action="<%= blobstoreService.createUploadUrl("/rest/audioClip") %>"  method="POST" enctype="multipart/form-data">
+                            <input type="hidden" id="audioSubmit_userId" name="userId"/>
                             <div>
                                 <label> title:</label><input type="text" name="title">
                             </div>
@@ -296,9 +290,7 @@
                             </div>
                             <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save Audio</button>
                             <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
-                        </div>
                         </form>
-                        </div>
                         <br/>
                         <br/>
                     </div>
@@ -340,9 +332,6 @@
                 </div>
             </div>
         </div>
-        <%
-            }
-        %>
         <!-- jQuery -->
         <script src="js/jquery.js"></script>
         <!-- Bootstrap Core JavaScript -->

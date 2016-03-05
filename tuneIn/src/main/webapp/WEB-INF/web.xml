@@ -7,11 +7,10 @@
 	  <!-- Register resources and providers under com.vogella.jersey.first package. -->
 	  <init-param>
 	   <param-name>jersey.config.server.provider.packages</param-name>
-	   <param-value>cs263.tunein</param-value>
+	   <param-value>com.ucsb.cs263.tunein</param-value>
 	   
 	   <param-name>jersey.config.server.provider.classnames</param-name>
-	   <param-value>cs263.tunein.CORSFilter;org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
-
+	   <param-value>com.ucsb.cs263.tunein.CORSFilter;org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
 	  </init-param>
 	  <load-on-startup>1</load-on-startup>
 	</servlet>
@@ -22,7 +21,7 @@
 
 
 	<welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>register.html</welcome-file>
     </welcome-file-list>
 
 </web-app>
