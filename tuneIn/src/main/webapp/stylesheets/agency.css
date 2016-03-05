@@ -856,7 +856,17 @@ h1{border-bottom:5px solid #fed136;}
 }
 
 .explore .img-responsive img{
-	margin:auto;
-	height:250px;
-	width:250px;
+	/*margin:auto;*/
+	height:300px;
+	width:360px;
+}
+
+.audio_image{
+	height:300px;
+	width:360px;
+}
+
+.timeline_audio_image{
+	height: 100%;
+	width: 100%;
 }
