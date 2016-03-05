@@ -1,8 +1,8 @@
 hello.init({
-    google: '36542558745-placeneqlea01hiat8rednod6cqkiq36.apps.googleusercontent.com'
+    google: '36542558745-tcmhfqeondfsvoo6ppq143tkfs51d6um.apps.googleusercontent.com'
 }, 
 {
-    redirect_uri: 'index.html',
+    redirect_uri: 'index2.html',
     scope: 'email'
 },
 {
@@ -15,7 +15,7 @@ hello.on('auth.login', function(auth) {
     hello(auth.network).api('/me').then(function(r) {
         //do something
         user=r;
-        window.location = "index2.jsp";
+        window.location = "index2.html";
     });
 });
 
