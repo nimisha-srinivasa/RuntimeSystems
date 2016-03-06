@@ -44,7 +44,9 @@ function createAudioRecordModal(){
         method: "GET",
         contentType: "application/json",
         success: function(data){
-            $("#audioRecordModalDetails").append('<form action="'+data+'"  method="POST" enctype="multipart/form-data"><input type="hidden" id="audioSubmit_userId" name="userId" value="'+user.id+'"/><div><label> Title:</label><input type="text" name="title"></div><div><label> Image:</label><input type="file" name="myImage"></div><div><label> Audio:</label><input type="file" name="myAudio"></div><button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save Audio</button><button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button></form>');
+            $("#audioRecordModalDetails").append('<form action="'+data+'"  method="POST" enctype="multipart/form-data"><input type="hidden" id="audioSubmit_userId" name="userId" value="'+user.id+'"/><div><label> Title:</label>&nbsp; &nbsp; <input type="text" name="title"></div><br/><div class="wrapper"><label> Image:</label><input id="myImage" type="file" class="file" name="myImage" data-preview-file-type="text"/></div><br/><div class="wrapper"><label> Audio:</label><input type="file" class="file" id="myAudio" name="myAudio" data-preview-file-type="text"/></div><br/><button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save Audio</button>&nbsp; &nbsp; &nbsp; <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button></form>');
+            $("#myImage").fileinput({'showUpload':false, 'showPreview':false});
+            $("#myAudio").fileinput({'showUpload':true, 'showPreview':false});
         }
     });
 }
@@ -94,7 +96,6 @@ function getOthersWork(){
 }
 
 function deleteAudioClip(btn){
-	alert(btn.value);
 	$.ajax({
 		url: "/rest/users/"+user.id+"/audioClips/"+btn.value,
 		type: "DELETE",
