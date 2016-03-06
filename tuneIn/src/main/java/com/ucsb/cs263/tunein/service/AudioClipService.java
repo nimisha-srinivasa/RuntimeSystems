@@ -12,18 +12,21 @@ public class AudioClipService{
 	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   	BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 
-  	public List<AudioClip> getAllAudioClips(String userId){
-  		List<AudioClip> audioClipList=new ArrayList<AudioClip>();
+  	public List<AudioClipInstance> getAllAudioClips(String userId){
+  		List<AudioClipInstance> audioClipInstanceList=new ArrayList<AudioClipInstance>();
 	    Filter userFilter = new FilterPredicate("ownerId", FilterOperator.NOT_EQUAL, userId);
 	    Query q = new Query("AudioClip").setFilter(userFilter);
 	    PreparedQuery pq = datastore.prepare(q);
 
-	    AudioClip audioClip;
+	    AudioClipInstance audioClipInstance;
+	    User user;
+	    UserService userService = new UserService();
 	    for (Entity result : pq.asIterable()) {
-	      audioClip = new AudioClip(KeyFactory.keyToString(result.getKey()),(String)result.getProperty("title"), (String)result.getProperty("ownerId"), (String)result.getProperty("audio"), (String)result.getProperty("image"), (Date)result.getProperty("date"));
-	      audioClipList.add(audioClip);
+	    	user = userService.getUserById((String)result.getProperty("ownerId"));
+	    	audioClipInstance = new AudioClipInstance(KeyFactory.keyToString(result.getKey()),(String)result.getProperty("title"), user, (String)result.getProperty("audio"), (String)result.getProperty("image"), (Date)result.getProperty("date"));
+	    	audioClipInstanceList.add(audioClipInstance);
 	    }
-	    return audioClipList;
+	    return audioClipInstanceList;
 	}
 
 	public AudioClip getAudioClip(String id){

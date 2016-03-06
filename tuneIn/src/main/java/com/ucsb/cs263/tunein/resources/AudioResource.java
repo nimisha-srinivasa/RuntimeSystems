@@ -8,13 +8,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import javax.servlet.http.*;
 import java.util.*;
-import javax.xml.bind.JAXBElement;
-
-import org.glassfish.jersey.media.multipart.FormDataParam;
 
 
 import com.google.appengine.api.memcache.*;
-import com.google.appengine.api.users.*;
 import com.google.appengine.api.blobstore.*;
 import com.google.appengine.api.datastore.*;
 
@@ -34,7 +30,7 @@ public class AudioResource {
   @GET
   @Path("/others")
   @Produces(MediaType.APPLICATION_JSON )
-  public List<AudioClip> getAllAudioClips(@PathParam("userId") String userId) throws IOException{
+  public List<AudioClipInstance> getAllAudioClips(@PathParam("userId") String userId) throws IOException{
     audioClipService = new AudioClipService();
     return audioClipService.getAllAudioClips(userId);
   }
@@ -43,8 +39,7 @@ public class AudioResource {
   @Path("/{id}")
   @Produces(MediaType.APPLICATION_JSON )
   
-  public AudioClip getAudioClip(
-    @PathParam("id") String id) throws IOException{
+  public AudioClip getAudioClip(@PathParam("id") String id) throws IOException{
       audioClipService = new AudioClipService();
       return audioClipService.getAudioClip(id);
   }
