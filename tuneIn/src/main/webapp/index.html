@@ -10,14 +10,14 @@
         <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
         <!-- Custom CSS -->
         <link href="stylesheets/agency.css" rel="stylesheet">
-        <link href="stylesheets/my_stylesheet.css" rel="stylesheet">
         <!-- Custom Fonts -->
         <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
         <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
         <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
         <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script src="js/jquery.js"></script>
+        <script src="js/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/hello.min.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
     </head>
@@ -50,13 +50,10 @@
                             </li>
                             
                             <li>
-                                <a class="page-scroll" id="userName" href="#about"></a>
+                                <a class="page-scroll" id="userName" href="#myCreations"></a>
                             </li>
                             <li>
-                                <a class="page-scroll" href="FIGURE_IT_OUT">LogOut</a>
-                            </li>
-                            <li>
-                                <button class="btn btn-xl" onclick="logout()">LogOut</a>
+                                <a class="page-scroll" onclick="logout()">LogOut</a>
                             </li>
                             <li>
                                 
@@ -113,103 +110,17 @@
         <!-- Explore Section -->
         <section id="portfolio" class="bg-light-gray">
             <div class="container">
-                <div class="row">
+                <div class="row" id="othersWork">
                     <div class="col-lg-12 text-center">
                         <h2 class="section-heading">Explore</h2>
                         <h3 class="section-subheading text-muted">Checkout others' work. Be inspired!</h3>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-4 col-sm-6 portfolio-item">
-                        <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
-                            <div class="portfolio-hover">
-                                <div class="portfolio-hover-content">
-                                    <i class="fa fa-youtube-play fa-3x"></i>
-                                </div>
-                            </div>
-                            <img src="img/audio-default.jpg" class="explore img-responsive" alt="">
-                        </a>
-                        <div class="portfolio-caption">
-                            <h4>Song1</h4>
-                            <p class="text-muted">User1</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6 portfolio-item">
-                        <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
-                            <div class="portfolio-hover">
-                                <div class="portfolio-hover-content">
-                                    <i class="fa fa-youtube-play fa-3x"></i>
-                                </div>
-                            </div>
-                            <img src="img/audio-default.jpg" class="explore img-responsive" alt="">
-                        </a>
-                        <div class="portfolio-caption">
-                            <h4>Song2</h4>
-                            <p class="text-muted">User2</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6 portfolio-item">
-                        <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
-                            <div class="portfolio-hover">
-                                <div class="portfolio-hover-content">
-                                    <i class="fa fa-youtube-play fa-3x"></i>
-                                </div>
-                            </div>
-                            <img src="img/audio-default.jpg" class="explore img-responsive" alt="">
-                        </a>
-                        <div class="portfolio-caption">
-                            <h4>Song3</h4>
-                            <p class="text-muted">User3</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6 portfolio-item">
-                        <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
-                            <div class="portfolio-hover">
-                                <div class="portfolio-hover-content">
-                                    <i class="fa fa-youtube-play fa-3x"></i>
-                                </div>
-                            </div>
-                            <img src="img/audio-default.jpg" class="explore img-responsive" alt="">
-                        </a>
-                        <div class="portfolio-caption">
-                            <h4>Song4</h4>
-                            <p class="text-muted">User4</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6 portfolio-item">
-                        <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
-                            <div class="portfolio-hover">
-                                <div class="portfolio-hover-content">
-                                    <i class="fa fa-youtube-play fa-3x"></i>
-                                </div>
-                            </div>
-                            <img src="img/audio-default.jpg" class="explore img-responsive" alt="">
-                        </a>
-                        <div class="portfolio-caption">
-                            <h4>Song5</h4>
-                            <p class="text-muted">User5</p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6 portfolio-item">
-                        <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal">
-                            <div class="portfolio-hover">
-                                <div class="portfolio-hover-content">
-                                    <i class="fa fa-youtube-play fa-3x"></i>
-                                </div>
-                            </div>
-                            <img src="img/audio-default.jpg" class="explore img-responsive" alt="">
-                        </a>
-                        <div class="portfolio-caption">
-                            <h4>Song6</h4>
-                            <p class="text-muted">User6</p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </section>
         <!-- About Section -->
-        <section id="about">
-            <div class="container">
+        <section id="myCreations">
+            <div class="container" id="usersPrevCreations">
                 <div class="row">
                     <div class="col-lg-12 text-center">
                         <h2 class="section-heading">Your Previous Creations</h2>
@@ -219,32 +130,16 @@
                 <div class="row">
                     <div class="col-lg-12" >
                         <ul class="timeline" id="myPrevWork">
-                            <li>
-                                <div class="timeline-image">
-                                    <img class="img-circle img-responsive" src="img/about/1.jpg" alt="">
-                                </div>
-                                <div class="timeline-panel">
-                                    <div class="timeline-heading">
-                                        <h4>2009-2011</h4>
-                                        <h4 class="subheading">Our Humble Beginnings</h4>
-                                    </div>
-                                    <div class="timeline-body">
-                                        <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
-                                    </div>
-                                </div>
-                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
         </section>
-        
-        <!-- Contact Section -->
         <footer>
             <div class="container">
                 <div class="row">
                     <div class="col-md-4">
-                        <span class="copyright">Copyright &copy; TuneIn  for CS263 2016</span>
+                        <span class="copyright">Copyright &copy; Your Website 2014</span>
                     </div>
                     <div class="col-md-4">
                         <ul class="list-inline social-buttons">
@@ -275,30 +170,15 @@
                     <div class="modal-body">
                         <a class="audio-modal close-modal" data-dismiss="modal"><i class="fa fa-3x fa-times"></i></a>
                         <h2>Record a Song now!</h2>
-                        <div>
-                        <span class="fa-stack fa-4x">
-                            <i class="fa fa-circle fa-stack-2x text-primary" style="color:#E82D2D"></i>
-                            <i class="fa fa-microphone fa-stack-1x fa-inverse"></i>
-                        </span>
-                        <br/>
-                        <br/>
+                        <div id="audioRecordModalDetails">
+                            <span class="fa-stack fa-4x">
+                                <i class="fa fa-circle fa-stack-2x text-primary" style="color:#E82D2D"></i>
+                                <i class="fa fa-microphone fa-stack-1x fa-inverse"></i>
+                            </span>
+                            <br/>
+                            <br/>
                         </div>
-                        <div id="uploadAudio">
-                            <form method="POST" enctype="multipart/form-data">
-                            <div>
-                                <label> title:</label><input type="text" name="title">
-                            </div>
-                            <div>
-                                <label> Image:</label><input type="file" name="myImage">
-                            </div>
-                            <div>
-                                <label> Audio:</label><input type="file" name="myAudio">
-                            </div>
-                            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save Audio</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Cancel</button>
-                        </div>
-                        </form>
-                        </div>
+                        
                         <br/>
                         <br/>
                     </div>
@@ -340,13 +220,9 @@
                 </div>
             </div>
         </div>
-        <%
-            }
-        %>
-        <!-- jQuery -->
-        <script src="js/jquery.js"></script>
-        <!-- Bootstrap Core JavaScript -->
-        <script src="js/bootstrap.min.js"></script>
+        <div id="othersWorkModals">
+        </div>
+        
         <!-- Plugin JavaScript -->
         <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
         <script src="js/classie.js"></script>

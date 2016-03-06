@@ -1,8 +1,8 @@
 hello.init({
-    google: '36542558745-tcmhfqeondfsvoo6ppq143tkfs51d6um.apps.googleusercontent.com'
+    google: '36542558745-1l96ap825s047nutvan7j1jb6l29eiva.apps.googleusercontent.com'
 }, 
 {
-    redirect_uri: 'register.html',
+    redirect_uri: 'login.html',
     scope: 'email'
 });
 hello.on('auth.login', function(auth) {
@@ -60,7 +60,7 @@ function getMyPreviousWork(){
                     $.each(data, function(i, item) {
                         image_url = basic_url+"/image?blobkey="+item.image;
                         audio_url = basic_url+"/audio?blobkey="+item.audio;
-                        $("#myPrevWork").append("<li> <div class=\"timeline-image\"><img class=\"timeline_audio_image img-circle img-responsive\" src=\""+image_url+"\" alt=\"\"></div><div class=\"timeline-panel\"><div class=\"timeline-heading\"><h4>"+item.date+"</h4><h4 class=\"subheading\">"+item.title+"</h4></div><div class=\"timeline-body\"><p class=\"text-muted\"><audio controls> <source src=\""+audio_url+"\" type=\"audio/mpeg\" /></audio></p></div></div></li>");
+                        $("#myPrevWork").append("<li> <div class=\"timeline-image\"><img class=\"timeline_audio_image img-circle img-responsive\" src=\""+image_url+"\" alt=\"Audio Clip\"></div><div class=\"timeline-panel\"><div class=\"timeline-heading\"><h4>"+item.date+"</h4><h4 class=\"subheading\">"+item.title+"</h4></div><div class=\"timeline-body\"><p class=\"text-muted\"><audio controls> <source src=\""+audio_url+"\" type=\"audio/mpeg\" /></audio></p></div></div></li>");
                     });
                 },
                 error: function (xhr, status) {
