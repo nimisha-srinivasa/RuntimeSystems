@@ -107,13 +107,30 @@ public class AudioResource {
   }
 
   @DELETE
-  public void deleteAudioClip() {
-
+  @Path("/{id}")
+  public void deleteAudioClip(@PathParam("id") String id) {
+	  audioClipService.deleteAudioClip(id);
+  }
+  
+  @DELETE
+  @Path("/audio")
+  public void deleteAudioBlob(
+    @QueryParam("blobkey") String blobkey) throws IOException{
+	  audioClipService.deleteBlob(blobkey); 
+  }
+  
+  @DELETE
+  @Path("/image")
+  public void deleteImageBlob(
+    @QueryParam("blobkey") String blobkey) throws IOException{
+	  if(blobkey!=null){
+		  audioClipService.deleteBlob(blobkey);
+	  }
   }
 
   @PUT 
   public void updateAudioClip() {
-
+	  /* TODO */
   }
 
 } 

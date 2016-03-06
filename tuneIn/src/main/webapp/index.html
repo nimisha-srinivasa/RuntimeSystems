@@ -88,7 +88,7 @@
                     <div class="col-md-6">
                         <span class="fa-stack fa-4x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
-                        <a href="#about"><i class="fa fa-music fa-stack-1x fa-inverse"></i></a>
+                        <a href="#portfolio"><i class="fa fa-music fa-stack-1x fa-inverse"></i></a>
                         </span>
                         <h4 class="service-heading">Your previous creations</h4>
                         <p class="text-muted">Check out the awesome work you did before!</p>
@@ -97,7 +97,7 @@
                         <a href="#audioRecordModal" data-toggle="modal">
                         <span class="fa-stack fa-4x">
                         <i class="fa fa-circle fa-stack-2x text-primary"></i>
-                        <i class="fa fa-microphone fa-stack-1x fa-inverse"></i></button>
+                        <i class="fa fa-microphone fa-stack-1x fa-inverse"></i>
                         </span>
                         </a>
                         <h4 class="service-heading">Record a new song</h4>
@@ -110,11 +110,13 @@
         <!-- Explore Section -->
         <section id="portfolio" class="bg-light-gray">
             <div class="container">
-                <div class="row" id="othersWork">
+                <div class="row" >
                     <div class="col-lg-12 text-center">
                         <h2 class="section-heading">Explore</h2>
                         <h3 class="section-subheading text-muted">Checkout others' work. Be inspired!</h3>
                     </div>
+                </div>
+                <div class="row" id="othersWork">
                 </div>
             </div>
         </section>
@@ -129,7 +131,15 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-12" >
-                        <ul class="timeline" id="myPrevWork">
+                        <ul class="timeline">
+                        <li class="timeline-inverted" id="myPrevWork">
+                        	<div class="timeline-image">
+                            	<h4>Keep up
+                                	<br>the
+                                    <br>Good Work!
+                                </h4>
+                             </div>
+                         </li>
                         </ul>
                     </div>
                 </div>
@@ -190,36 +200,8 @@
         <!-- Audio Record Modal -->
 
         <!-- Portfolio Modals -->
-        <!-- Use the modals below to showcase details about your portfolio projects! -->
-        <!-- Portfolio Modal 1 -->
-        <div class="audio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <a class="audio-modal close-modal" data-dismiss="modal"><i class="fa fa-3x fa-times"></i></a>
-                        <h2>Song 1</h2>
-                        <p class="item-intro text-muted">By User1</p>
-                        <img class="portfolio-img img-responsive img-centered" src="img/audio-default.jpg" alt="">
-                        <br/>
-                        <audio controls>
-                            <source src="http://www.w3schools.com/html/horse.ogg" type="audio/ogg" />
-                            <source src="http://www.w3schools.com/html/horse.mp3" type="audio/mpeg" />
-                            <a href="http://www.w3schools.com/html/horse.mp3">horse</a>
-                        </audio>
-                        <br/>
-                        <br/>
-                        <ul class="list-inline">
-                            <li>Date: July 2014</li>
-                            <li>Client: Round Icons</li>
-                            <li>Category: Graphic Design</li>
-                        </ul>
-                        <br/>
-                    </div>
-                    <div class="clearfix"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Use the modals below to showcase details about your projects! -->
+
         <div id="othersWorkModals">
         </div>
         

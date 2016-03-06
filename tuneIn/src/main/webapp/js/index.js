@@ -16,7 +16,7 @@ hello.on('auth.login', function(auth) {
 //hello.logout() doesnt work for google plus!!
 function logout(){
 	hello.logout();
-	window.location = "register.html";
+	window.location = "login.html";
 }
 
 function getUserInfo(){
@@ -58,9 +58,10 @@ function getMyPreviousWork(){
                 dataType: "json",
                 success: function (data) {
                     $.each(data, function(i, item) {
-                        image_url = basic_url+"/image?blobkey="+item.image;
-                        audio_url = basic_url+"/audio?blobkey="+item.audio;
-                        $("#myPrevWork").append("<li> <div class=\"timeline-image\"><img class=\"timeline_audio_image img-circle img-responsive\" src=\""+image_url+"\" alt=\"Audio Clip\"></div><div class=\"timeline-panel\"><div class=\"timeline-heading\"><h4>"+item.date+"</h4><h4 class=\"subheading\">"+item.title+"</h4></div><div class=\"timeline-body\"><p class=\"text-muted\"><audio controls> <source src=\""+audio_url+"\" type=\"audio/mpeg\" /></audio></p></div></div></li>");
+                        image_url = basic_url+"/image?blobkey="+item.imageId;
+                        audio_url = basic_url+"/audio?blobkey="+item.audioId;
+                        delete_button = '<button class="btn btn-primary" value="'+item.keyname+'" onclick="deleteAudioClip(this)"><i class="fa fa-times"></i>Delete Audio</button>';
+                        $("#myPrevWork").before("<li> <div class=\"timeline-image\"><img class=\"timeline_audio_image img-circle img-responsive\" src=\""+image_url+"\" alt=\"Audio Clip\"></div><div class=\"timeline-panel\"><div class=\"timeline-heading\"><h4>"+item.title+"</h4><h4 class=\"subheading\">"+item.date+"</h4></div><div class=\"timeline-body\"><p class=\"text-muted\"><audio controls> <source src=\""+audio_url+"\" type=\"audio/mpeg\" /></audio></p><div><br/><br/>"+delete_button+"</div></div></div></li>");
                     });
                 },
                 error: function (xhr, status) {
@@ -80,9 +81,9 @@ function getOthersWork(){
             success: function (data) {
                 $.each(data, function(i, item) {
                     currModalId=othersWorkModalId++;
-                    image_url = basic_url+"/image?blobkey="+item.image;
-                    audio_url = basic_url+"/audio?blobkey="+item.audio;
-                    $("#othersWork").append('<div class="col-md-4 col-sm-6 portfolio-item"><a href="othersWorkModal'+currModalId+'" class="portfolio-link" data-toggle="modal" data-target="#othersWorkModal'+currModalId+'"><div class="portfolio-hover"><div class="portfolio-hover-content"><i class="fa fa-youtube-play fa-3x"></i></div></div><img src="'+image_url+'" class="audio_image" alt=""></a><div class="portfolio-caption"><h4>'+item.title+'</h4><p class="text-muted">'+item.owner.displayName+'</p></div>');
+                    image_url = basic_url+"/image?blobkey="+item.imageId;
+                    audio_url = basic_url+"/audio?blobkey="+item.audioId;
+                    $("#othersWork").append('<div class="col-md-4 col-sm-6 portfolio-item"><a href="#othersWorkModal'+currModalId+'" class="portfolio-link" data-toggle="modal" data-target="#othersWorkModal'+currModalId+'"><div class="portfolio-hover"><div class="portfolio-hover-content"><i class="fa fa-youtube-play fa-3x"></i></div></div><img src="'+image_url+'" class="audio_image" alt=""></a><div class="portfolio-caption"><h4>'+item.title+'</h4><p class="text-muted">'+item.owner.displayName+'</p></div>');
                     $("#audioRecordModal").after('<div class="audio-modal modal fade" id="othersWorkModal'+currModalId+'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><a class="audio-modal close-modal" data-dismiss="modal"><i class="fa fa-3x fa-times"></i></a><h2>'+item.title+'</h2><p class="item-intro text-muted">By '+item.owner.displayName+'</p><img class="portfolio-img img-responsive img-centered" src="'+image_url+'" alt=""><br/><audio controls><source src="'+audio_url+'" type="audio/mpeg" /></audio><br/><br/><ul class="list-inline"><li>Date: '+item.date+'</li></ul><br/></div><div class="clearfix"></div></div></div></div></div>');
                 });
             },
@@ -90,5 +91,20 @@ function getOthersWork(){
                 alert("error");
             }
     });
+}
+
+function deleteAudioClip(btn){
+	alert(btn.value);
+	$.ajax({
+		url: "/rest/users/"+user.id+"/audioClips/"+btn.value,
+		type: "DELETE",
+        crossDomain: true,
+        success: function (data) {
+        	alert("delete successful");
+        },
+        error: function (xhr, status) {
+            alert("error");
+        }
+	});
 }
 

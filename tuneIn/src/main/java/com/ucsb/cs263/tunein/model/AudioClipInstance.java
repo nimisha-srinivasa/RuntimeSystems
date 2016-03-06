@@ -19,28 +19,28 @@ public class AudioClipInstance implements Serializable{
   private String keyname;	
   private String title;
   private User owner;	
-  private String audio; 	//actually refers to a BlobKey
-  private String image;		//actually refers to a BlobKey
+  private String audioId; 	//actually refers to a BlobKey
+  private String imageId;		//actually refers to a BlobKey
   private Date date;
 
   public AudioClipInstance(){
 
   }
 
-  public AudioClipInstance(String keyname, String title, User owner, String audio, String image, Date date){
+  public AudioClipInstance(String keyname, String title, User owner, String audioId, String imageId, Date date){
   	this.keyname = keyname;
   	this.title = title;
   	this.owner = owner;
-  	this.audio = audio;
-  	this.image = image;
+  	this.audioId = audioId;
+  	this.imageId = imageId;
   	this.date = date;
   }
 
-  public AudioClipInstance(String title, User owner, String audio, String image, Date date){
+  public AudioClipInstance(String title, User owner, String audioId, String imageId, Date date){
   	this.title = title;
   	this.owner = owner;
-  	this.audio = audio;
-  	this.image = image;
+  	this.audioId = audioId;
+  	this.imageId = imageId;
   	this.date = date;
   }
 
@@ -69,20 +69,20 @@ public class AudioClipInstance implements Serializable{
 		this.owner = owner;
 	}
 	
-	public String getAudio() {
-		return audio;
+	public String getAudioId() {
+		return audioId;
 	}
 	
-	public void setAudio(String audio) {
-		this.audio = audio;
+	public void setAudioId(String audioId) {
+		this.audioId = audioId;
 	}
 	
-	public String getImage() {
-		return image;
+	public String getImageId() {
+		return imageId;
 	}
 	
-	public void setImage(String image) {
-		this.image = image;
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
 	}
 	
 	@JsonSerialize(using=JsonDateSerializer.class)
