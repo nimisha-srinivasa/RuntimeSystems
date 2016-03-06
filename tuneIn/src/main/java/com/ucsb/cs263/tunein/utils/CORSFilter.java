@@ -1,4 +1,4 @@
-package com.ucsb.cs263.tunein;
+package com.ucsb.cs263.tunein.utils;
 
 import java.io.IOException;
 import javax.ws.rs.container.ContainerRequestContext;

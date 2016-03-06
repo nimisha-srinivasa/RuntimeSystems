@@ -10,7 +10,7 @@
 	   <param-value>com.ucsb.cs263.tunein</param-value>
 	   
 	   <param-name>jersey.config.server.provider.classnames</param-name>
-	   <param-value>com.ucsb.cs263.tunein.CORSFilter;org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
+	   <param-value>com.ucsb.cs263.tunein.utils.CORSFilter;org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
 	  </init-param>
 	  <load-on-startup>1</load-on-startup>
 	</servlet>
