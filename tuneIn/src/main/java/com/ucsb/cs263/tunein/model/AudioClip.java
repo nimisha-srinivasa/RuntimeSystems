@@ -2,11 +2,14 @@ package com.ucsb.cs263.tunein.model;
 
 //import com.fasterxml.jackson.databind.annotation.*;
 import javax.xml.bind.annotation.*;
+import com.fasterxml.jackson.databind.annotation.*;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.blobstore.*;
 
 import java.util.*;
+
+import com.ucsb.cs263.tunein.utils.*;
 
 //import com.ucsb.cs263.tunein.utils.*;
 
@@ -82,6 +85,7 @@ public class AudioClip {
 		this.image = image;
 	}
 	
+	@JsonSerialize(using=JsonDateSerializer.class)
 	public Date getDate() {
 		return date;
 	}
