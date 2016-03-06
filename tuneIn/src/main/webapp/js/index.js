@@ -24,6 +24,7 @@ function getUserInfo(){
     userJson.userId = user.id;
     userJson.firstName = user.first_name;
     userJson.lastName = user.last_name;
+    userJson.displayName = user.displayName;
     userJson.emailId = user.email;
     return $.ajax({
         url: "rest/users", 
@@ -70,6 +71,7 @@ function getMyPreviousWork(){
 
 function getOthersWork(){
     othersWorkModalId=0;
+    basic_url="/rest/users/"+user.id+"/audioClips";
     $.ajax({
             url: basic_url+"/others",
             type: "GET",
@@ -80,10 +82,8 @@ function getOthersWork(){
                     currModalId=othersWorkModalId++;
                     image_url = basic_url+"/image?blobkey="+item.image;
                     audio_url = basic_url+"/audio?blobkey="+item.audio;
-                    $("#othersWork").append('<div class="col-md-4 col-sm-6 portfolio-item"><a href="othersWorkModal'+currModalId+'" class="portfolio-link" data-toggle="modal" data-target="#othersWorkModal'+currModalId+'"><div class="portfolio-hover"><div class="portfolio-hover-content"><i class="fa fa-youtube-play fa-3x"></i></div></div><img src="'+image_url+'" class="audio_image" alt=""></a><div class="portfolio-caption"><h4>'+item.title+'</h4><p class="text-muted">User1</p></div>');
-                    //$("#othersWork").append('<div class="col-md-4 col-sm-6 portfolio-item"><button class="portfolio-link" data-toggle="modal" data-target="#othersWorkModal'+currModalId+'"><div class="portfolio-hover"><div class="portfolio-hover-content"><i class="fa fa-youtube-play fa-3x"></i></div></div><img src="'+image_url+'" class="explore img-responsive" alt=""></a><div class="portfolio-caption"><h4>'+item.title+'</h4><p class="text-muted">User1</p></div>');
-                    //$("#othersWorkModals").append('<div class="audio-modal modal fade" id="#othersWorkModal'+currModalId+'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><a class="audio-modal close-modal" data-dismiss="modal"><i class="fa fa-3x fa-times"></i></a><h2>'+item.title+'</h2><p class="item-intro text-muted">By '+item.ownerId+'</p><img class="portfolio-img img-responsive img-centered" src="'+image_url+'" alt=""><br/><audio controls><source src="'+audio_url+'" type="audio/mpeg" /></audio><br/><br/><ul class="list-inline"><li>Date: '+item.date+'</li></ul><br/></div><div class="clearfix"></div></div></div></div></div>');
-                    $("#audioRecordModal").after('<div class="audio-modal modal fade" id="othersWorkModal'+currModalId+'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><a class="audio-modal close-modal" data-dismiss="modal"><i class="fa fa-3x fa-times"></i></a><h2>'+item.title+'</h2><p class="item-intro text-muted">By '+item.ownerId+'</p><img class="portfolio-img img-responsive img-centered" src="'+image_url+'" alt=""><br/><audio controls><source src="'+audio_url+'" type="audio/mpeg" /></audio><br/><br/><ul class="list-inline"><li>Date: '+item.date+'</li></ul><br/></div><div class="clearfix"></div></div></div></div></div>');
+                    $("#othersWork").append('<div class="col-md-4 col-sm-6 portfolio-item"><a href="othersWorkModal'+currModalId+'" class="portfolio-link" data-toggle="modal" data-target="#othersWorkModal'+currModalId+'"><div class="portfolio-hover"><div class="portfolio-hover-content"><i class="fa fa-youtube-play fa-3x"></i></div></div><img src="'+image_url+'" class="audio_image" alt=""></a><div class="portfolio-caption"><h4>'+item.title+'</h4><p class="text-muted">'+item.owner.displayName+'</p></div>');
+                    $("#audioRecordModal").after('<div class="audio-modal modal fade" id="othersWorkModal'+currModalId+'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-body"><a class="audio-modal close-modal" data-dismiss="modal"><i class="fa fa-3x fa-times"></i></a><h2>'+item.title+'</h2><p class="item-intro text-muted">By '+item.owner.displayName+'</p><img class="portfolio-img img-responsive img-centered" src="'+image_url+'" alt=""><br/><audio controls><source src="'+audio_url+'" type="audio/mpeg" /></audio><br/><br/><ul class="list-inline"><li>Date: '+item.date+'</li></ul><br/></div><div class="clearfix"></div></div></div></div></div>');
                 });
             },
             error: function (xhr, status) {

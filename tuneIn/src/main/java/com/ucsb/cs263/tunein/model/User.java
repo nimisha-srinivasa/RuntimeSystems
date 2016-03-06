@@ -9,15 +9,17 @@ public class User {
 	private String userId;
 	private String firstName;
 	private String lastName;
+	private String displayName;
 	private String emailId;
 	
 	public User(){
 	}
 
-	public User(String userId, String firstName, String lastName, String emailId){
+	public User(String userId, String firstName, String lastName, String displayName, String emailId){
 		this.userId = userId;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.displayName  = displayName;
 		this.emailId = emailId;
 	}
 	
@@ -38,7 +40,13 @@ public class User {
 		return lastName;
 	}
 	public void setLastName(String lastName) {
-		this.lastName = firstName;
+		this.lastName = lastName;
+	}
+	public String getDisplayName() {
+		return displayName;
+	}
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 	public String getEmailId() {
 		return emailId;
