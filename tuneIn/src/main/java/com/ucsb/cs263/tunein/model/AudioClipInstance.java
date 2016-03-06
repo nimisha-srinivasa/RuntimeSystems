@@ -1,24 +1,26 @@
 package com.ucsb.cs263.tunein.model;
 
-//import com.fasterxml.jackson.databind.annotation.*;
-import javax.xml.bind.annotation.*;
 
-import com.google.appengine.api.datastore.*;
-import com.google.appengine.api.blobstore.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import java.util.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-//import com.ucsb.cs263.tunein.utils.*;
+import java.io.Serializable;
+import java.util.Date;
+
+import com.ucsb.cs263.tunein.utils.JsonDateSerializer;
 
 // JAX-RS supports an automatic mapping from JAXB annotated class to XML and JSON
 @XmlRootElement
-public class AudioClipInstance{
+public class AudioClipInstance implements Serializable{
+ 
+  private static final long serialVersionUID = 1L;
   private String keyname;	
   private String title;
-  private User owner;	//actually refers to a Key
+  private User owner;	
   private String audio; 	//actually refers to a BlobKey
   private String image;		//actually refers to a BlobKey
-  //@JsonSerialize(using = CustomDateSerializer.class)
   private Date date;
 
   public AudioClipInstance(){
@@ -83,6 +85,7 @@ public class AudioClipInstance{
 		this.image = image;
 	}
 	
+	@JsonSerialize(using=JsonDateSerializer.class)
 	public Date getDate() {
 		return date;
 	}

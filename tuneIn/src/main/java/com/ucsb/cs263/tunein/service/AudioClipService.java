@@ -1,31 +1,46 @@
 package com.ucsb.cs263.tunein.service;
 
+import com.google.appengine.api.blobstore.*;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.Query.*;
-import com.google.appengine.api.blobstore.*;
+import com.google.appengine.api.memcache.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-import com.ucsb.cs263.tunein.model.*;
+import com.ucsb.cs263.tunein.model.AudioClip;
+import com.ucsb.cs263.tunein.model.AudioClipInstance;
+import com.ucsb.cs263.tunein.model.User;
 
 public class AudioClipService{
 	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
   	BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+  	MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
 
   	public List<AudioClipInstance> getAllAudioClips(String userId){
-  		List<AudioClipInstance> audioClipInstanceList=new ArrayList<AudioClipInstance>();
-	    Filter userFilter = new FilterPredicate("ownerId", FilterOperator.NOT_EQUAL, userId);
-	    Query q = new Query("AudioClip").setFilter(userFilter);
-	    PreparedQuery pq = datastore.prepare(q);
-
-	    AudioClipInstance audioClipInstance;
-	    User user;
-	    UserService userService = new UserService();
-	    for (Entity result : pq.asIterable()) {
-	    	user = userService.getUserById((String)result.getProperty("ownerId"));
-	    	audioClipInstance = new AudioClipInstance(KeyFactory.keyToString(result.getKey()),(String)result.getProperty("title"), user, (String)result.getProperty("audio"), (String)result.getProperty("image"), (Date)result.getProperty("date"));
-	    	audioClipInstanceList.add(audioClipInstance);
-	    }
+  		List<AudioClipInstance> audioClipInstanceList;
+  		
+  		// check mem-cache for the results first
+  		String CACHE_KEY = "OTHERS_"+userId;
+  		audioClipInstanceList =  (ArrayList<AudioClipInstance>) syncCache.get(CACHE_KEY);
+  		
+  		if(audioClipInstanceList == null){
+  			audioClipInstanceList=new ArrayList<AudioClipInstance>();
+  			Filter userFilter = new FilterPredicate("ownerId", FilterOperator.NOT_EQUAL, userId);
+  		    Query q = new Query("AudioClip").setFilter(userFilter);
+  		    PreparedQuery pq = datastore.prepare(q);
+  		    AudioClipInstance audioClipInstance;
+	  	    User user;
+	  	    UserService userService = new UserService();
+	  	    for (Entity result : pq.asIterable()) {
+	  	    	user = userService.getUserById((String)result.getProperty("ownerId"));
+	  	    	audioClipInstance = new AudioClipInstance(KeyFactory.keyToString(result.getKey()),(String)result.getProperty("title"), user, (String)result.getProperty("audio"), (String)result.getProperty("image"), (Date)result.getProperty("date"));
+	  	    	audioClipInstanceList.add(audioClipInstance);
+	  	    }
+	  	    syncCache.put(CACHE_KEY, audioClipInstanceList, Expiration.byDeltaSeconds(300));
+  		}
+	   
 	    return audioClipInstanceList;
 	}
 
@@ -43,16 +58,26 @@ public class AudioClipService{
 	}
 
 	public List<AudioClip> getAudioClipsByUser(String userId){
-		List<AudioClip> audioClipList=new ArrayList<AudioClip>();
+		List<AudioClip> audioClipList;
 	    Filter userFilter = new FilterPredicate("ownerId", FilterOperator.EQUAL, userId);
 	    Query q = new Query("AudioClip").setFilter(userFilter).addSort("date", SortDirection.ASCENDING);
 	    PreparedQuery pq = datastore.prepare(q);
+	    
+	    // check mem-cache for the results first
+  		String CACHE_KEY = "USERS_"+userId;
+  		audioClipList =  (ArrayList<AudioClip>) syncCache.get(CACHE_KEY);
+  		
+  		if(audioClipList==null){
+  			audioClipList=new ArrayList<AudioClip>();
+  			AudioClip audioClip;
+  		    for (Entity result : pq.asIterable()) {
+  		      audioClip = new AudioClip(KeyFactory.keyToString(result.getKey()),(String)result.getProperty("title"), (String)result.getProperty("ownerId"), (String)result.getProperty("audio"), (String)result.getProperty("image"), (Date)result.getProperty("date"));
+  		      audioClipList.add(audioClip);
+  		    }
+  		    syncCache.put(CACHE_KEY, audioClipList, Expiration.byDeltaSeconds(300));
+  		}
 
-	    AudioClip audioClip;
-	    for (Entity result : pq.asIterable()) {
-	      audioClip = new AudioClip(KeyFactory.keyToString(result.getKey()),(String)result.getProperty("title"), (String)result.getProperty("ownerId"), (String)result.getProperty("audio"), (String)result.getProperty("image"), (Date)result.getProperty("date"));
-	      audioClipList.add(audioClip);
-	    }
+	    
 	    return audioClipList;
 	}
 
