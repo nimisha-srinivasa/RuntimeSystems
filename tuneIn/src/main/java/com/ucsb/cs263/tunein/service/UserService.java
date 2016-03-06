@@ -2,7 +2,8 @@ package com.ucsb.cs263.tunein.service;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.Query.*;
-import com.ucsb.cs263.tunein.model.*;
+
+import com.ucsb.cs263.tunein.model.User;
 
 
 public class UserService{

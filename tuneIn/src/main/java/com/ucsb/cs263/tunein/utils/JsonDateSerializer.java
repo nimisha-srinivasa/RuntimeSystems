@@ -1,12 +1,13 @@
 package com.ucsb.cs263.tunein.utils;
 
-import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.ser.std.*;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.io.*;
 
 public class JsonDateSerializer extends StdSerializer<Date> {
 

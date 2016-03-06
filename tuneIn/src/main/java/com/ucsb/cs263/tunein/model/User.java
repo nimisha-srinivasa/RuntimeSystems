@@ -1,11 +1,14 @@
 package com.ucsb.cs263.tunein.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.*;
+
+import java.io.Serializable;
+
 
 @XmlRootElement
-public class User {
+public class User implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private String userId;
 	private String firstName;
 	private String lastName;

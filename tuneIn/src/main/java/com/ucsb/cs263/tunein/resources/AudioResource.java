@@ -1,21 +1,35 @@
 package com.ucsb.cs263.tunein.resources;
 
-import java.io.*;
-import java.util.*;
-import java.net.*;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
-import javax.servlet.http.*;
-import java.util.*;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Map;
 
-import com.google.appengine.api.memcache.*;
-import com.google.appengine.api.blobstore.*;
-import com.google.appengine.api.datastore.*;
-
-import com.ucsb.cs263.tunein.model.*;
-import com.ucsb.cs263.tunein.service.*;
+import com.ucsb.cs263.tunein.model.AudioClip;
+import com.ucsb.cs263.tunein.model.AudioClipInstance;
+import com.ucsb.cs263.tunein.service.AudioClipService;
 
 @Path("/users/{userId}/audioClips")
 public class AudioResource {
@@ -24,30 +38,27 @@ public class AudioResource {
   @Context
   Request request;
 
-  private AudioClipService audioClipService;
+  private AudioClipService audioClipService = new AudioClipService();;
   private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+  
 
   @GET
   @Path("/others")
   @Produces(MediaType.APPLICATION_JSON )
   public List<AudioClipInstance> getAllAudioClips(@PathParam("userId") String userId) throws IOException{
-    audioClipService = new AudioClipService();
     return audioClipService.getAllAudioClips(userId);
   }
 
   @GET
   @Path("/{id}")
   @Produces(MediaType.APPLICATION_JSON )
-  
   public AudioClip getAudioClip(@PathParam("id") String id) throws IOException{
-      audioClipService = new AudioClipService();
       return audioClipService.getAudioClip(id);
   }
   
   @GET
   @Produces(MediaType.APPLICATION_JSON )
   public List<AudioClip> getAudioClipsByUser(@PathParam("userId") String userId) throws IOException{
-    audioClipService = new AudioClipService();
       return audioClipService.getAudioClipsByUser(userId);
     
   }
@@ -89,11 +100,9 @@ public class AudioResource {
       Map<String, BlobKey> blobs = blobstoreService.getUploadedBlobs(request);
       BlobKey audio_blobKey = blobs.get("myAudio");
       BlobKey image_blobKey = blobs.get("myImage");
-      Key user_key;
       String userId = request.getParameter("userId");
-      audioClipService = new AudioClipService();
       String audioclip_key = audioClipService.newAudioClip(userId, request.getParameter("title"), 
-        audio_blobKey.getKeyString(), image_blobKey.getKeyString());
+    		  audio_blobKey.getKeyString(), image_blobKey.getKeyString());
       return Response.seeOther(new URI("/success.html?audioclip_key="+audioclip_key+"&userId="+userId)).build();
   }
 
