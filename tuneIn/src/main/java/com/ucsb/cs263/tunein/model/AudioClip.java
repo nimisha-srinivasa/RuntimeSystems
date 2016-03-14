@@ -41,6 +41,13 @@ public class AudioClip implements Serializable{
 	  	this.imageId = imageId;
 	  	this.date = date;
 	  }
+	  
+	  public AudioClip(String title, String ownerId, String audioId, String imageId){
+		  	this.title = title;
+		  	this.ownerId = ownerId;
+		  	this.audioId = audioId;
+		  	this.imageId = imageId;
+		  }
 
 		public String getKeyname() {
 			return keyname;
@@ -90,5 +97,32 @@ public class AudioClip implements Serializable{
 		public void setDate(Date date) {
 			this.date = date;
 		}
+		
+		@Override
+	    public boolean equals(Object o) {
+	 
+	        // If the object is compared with itself then return true  
+	        if (o == this) {
+	            return true;
+	        }
+	 
+	        /* Check if o is an instance of Complex or not
+	          "null instanceof [type]" also returns false */
+	        if (!(o instanceof AudioClip)) {
+	            return false;
+	        }
+	         
+	        // typecast o to Complex so that we can compare data members 
+	        AudioClip u = (AudioClip) o;
+	         
+	        // Compare the data members and return accordingly 
+	        return keyname.equals(u.keyname)
+	        		&& title.equals(u.title)
+	        		&& ownerId.equals(u.ownerId)
+	        		&& audioId.equals(u.audioId)
+	        		&& imageId.equals(u.imageId)
+	        		&& date.equals(u.date);
+	        		
+	    }
   
 } 
