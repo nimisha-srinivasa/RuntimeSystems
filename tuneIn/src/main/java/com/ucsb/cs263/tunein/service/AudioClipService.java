@@ -40,24 +40,35 @@ public class AudioClipService{
   	UserService userService = new UserService();
 
   	public List<AudioClipInstance> getOtherUsersAudioClips(String userId) throws BadRequestException{
-  		List<AudioClipInstance> audioClipInstanceList = new ArrayList<AudioClipInstance>();
+  		List<AudioClipInstance> audioClipInstanceList;
   		
   		//no need to check for user existance here! if UserId is null, then all audioClips are returned
 		Filter userFilter = new FilterPredicate(TuneInConstants.AUDIO_CLIP_OWNER_ID, FilterOperator.NOT_EQUAL, userId);
 	    Query q = new Query(TuneInConstants.AUDIO_CLIP_TYPE).setFilter(userFilter);
 	    PreparedQuery pq = datastore.prepare(q);
-	    AudioClipInstance audioClipInstance;
-  	    User user;
-  	    for (Entity result : pq.asIterable()) {
-  	    	user = userService.getUserById((String)result.getProperty(TuneInConstants.AUDIO_CLIP_OWNER_ID));
-  	    	audioClipInstance = new AudioClipInstance(KeyFactory.keyToString(result.getKey()),
-  	    						(String)result.getProperty(TuneInConstants.AUDIO_CLIP_TITLE), 
-  	    						user, 
-  	    						(String)result.getProperty(TuneInConstants.AUDIO_CLIP_AUDIO_ID), 
-  	    						(String)result.getProperty(TuneInConstants.AUDIO_CLIP_IMAGE_ID), 
-  	    						(Date)result.getProperty(TuneInConstants.AUDIO_CLIP_DATE));
-  	    	audioClipInstanceList.add(audioClipInstance); 
+	    
+	 // check mem-cache for the results first
+	  	String CACHE_KEY = TuneInConstants.OTHERS_WORK_KEY+userId;
+	  	audioClipInstanceList =  (ArrayList<AudioClipInstance>) syncCache.get(CACHE_KEY);
+  	    
+  	    if(audioClipInstanceList==null){
+  	    	audioClipInstanceList = new ArrayList<AudioClipInstance>();
+  	    	User user;
+  	  	    AudioClipInstance audioClipInstance;
+  	  	    
+  	    	for (Entity result : pq.asIterable()) {
+  	  	    	user = userService.getUserById((String)result.getProperty(TuneInConstants.AUDIO_CLIP_OWNER_ID));
+  	  	    	audioClipInstance = new AudioClipInstance(KeyFactory.keyToString(result.getKey()),
+  	  	    						(String)result.getProperty(TuneInConstants.AUDIO_CLIP_TITLE), 
+  	  	    						user, 
+  	  	    						(String)result.getProperty(TuneInConstants.AUDIO_CLIP_AUDIO_ID), 
+  	  	    						(String)result.getProperty(TuneInConstants.AUDIO_CLIP_IMAGE_ID), 
+  	  	    						(Date)result.getProperty(TuneInConstants.AUDIO_CLIP_DATE));
+  	  	    	audioClipInstanceList.add(audioClipInstance); 
+  	  	    }
+  	    	syncCache.put(CACHE_KEY, audioClipInstanceList, Expiration.byDeltaSeconds(300));
   	    }
+  	    
 	    return audioClipInstanceList;
 	}
 
@@ -79,46 +90,31 @@ public class AudioClipService{
 	    }
 	}
 
-	public List<AudioClip> getAudioClipsByUser(String userId){
-		List<AudioClip> audioClipList;
+	public List<AudioClip> getAudioClipsByUser(String userId) throws BadRequestException{
+		List<AudioClip> audioClipList=new ArrayList<AudioClip>();
 		
 		//verify userId
-		UserService userService = new UserService();
-  		User user = userService.getUserById(userId);
-  		if(user!=null){//user exists
-  			Filter userFilter = new FilterPredicate(TuneInConstants.AUDIO_CLIP_OWNER_ID, FilterOperator.EQUAL, userId);
-  		    Query q = new Query(TuneInConstants.AUDIO_CLIP_TYPE).setFilter(userFilter).addSort(TuneInConstants.AUDIO_CLIP_DATE, 
-  		    			SortDirection.ASCENDING);
-  		    PreparedQuery pq = datastore.prepare(q);
-  		    
-  		    // check mem-cache for the results first
-  	  		String CACHE_KEY = "USERS_"+userId;
-  	  		audioClipList =  (ArrayList<AudioClip>) syncCache.get(CACHE_KEY);
-  	  		
-  	  		if(audioClipList==null){
-  	  			audioClipList=new ArrayList<AudioClip>();
-  	  			AudioClip audioClip;
-  	  		    for (Entity result : pq.asIterable()) {
-  	  		      audioClip = new AudioClip(KeyFactory.keyToString(result.getKey()),
-		  	  		    		(String)result.getProperty(TuneInConstants.AUDIO_CLIP_TITLE), 
-			    		  		(String)result.getProperty(TuneInConstants.AUDIO_CLIP_OWNER_ID), 
-			    		  		(String)result.getProperty(TuneInConstants.AUDIO_CLIP_AUDIO_ID), 
-			    		  		(String)result.getProperty(TuneInConstants.AUDIO_CLIP_IMAGE_ID), 
-			    		  		(Date)result.getProperty(TuneInConstants.AUDIO_CLIP_DATE));
-  	  		      audioClipList.add(audioClip);
-  	  		    }
-  	  		    syncCache.put(CACHE_KEY, audioClipList, Expiration.byDeltaSeconds(300));
-  	  		}
-  		}else{
-  			throw new BadRequestException();
-  		}
+		validateUserExistance(userId); //throws bad request exception of user doesn't exist
+		Filter userFilter = new FilterPredicate(TuneInConstants.AUDIO_CLIP_OWNER_ID, FilterOperator.EQUAL, userId);
+	    Query q = new Query(TuneInConstants.AUDIO_CLIP_TYPE).setFilter(userFilter).addSort(TuneInConstants.AUDIO_CLIP_DATE, 
+	    			SortDirection.ASCENDING);
+	    PreparedQuery pq = datastore.prepare(q);
+		AudioClip audioClip;
+	    for (Entity result : pq.asIterable()) {
+	      audioClip = new AudioClip(KeyFactory.keyToString(result.getKey()),
+  	  		    		(String)result.getProperty(TuneInConstants.AUDIO_CLIP_TITLE), 
+	    		  		(String)result.getProperty(TuneInConstants.AUDIO_CLIP_OWNER_ID), 
+	    		  		(String)result.getProperty(TuneInConstants.AUDIO_CLIP_AUDIO_ID), 
+	    		  		(String)result.getProperty(TuneInConstants.AUDIO_CLIP_IMAGE_ID), 
+	    		  		(Date)result.getProperty(TuneInConstants.AUDIO_CLIP_DATE));
+	      audioClipList.add(audioClip);
+	    }
 	    return audioClipList;
 	}
 
 	public String newAudioClip(String userId, String title, String audio, String image)throws BadRequestException{
 		//validate existence of the user
-		UserService userService = new UserService();
-  		User user = userService.getUserById(userId);	//throws bad request exception of user doesn't exist
+		validateUserExistance(userId);	//throws bad request exception of user doesn't exist
   		
 		Entity audioClip = new Entity(TuneInConstants.AUDIO_CLIP_TYPE);
 	    audioClip.setProperty(TuneInConstants.AUDIO_CLIP_TITLE,title);
@@ -158,12 +154,12 @@ public class AudioClipService{
 			audioCLipList = new ArrayList<AudioClip>();
 		}
 		audioCLipList.add(audioClip);
-		syncCache.put(TuneInConstants.ALL_AUDIO_CLIPS, audioCLipList, Expiration.byDeltaSeconds(300));
+		syncCache.put(TuneInConstants.ALL_AUDIO_CLIPS, audioCLipList, Expiration.byDeltaSeconds(60));
 	    return audioClip.getKeyname();
 	}
 	
 	private void validateUserExistance(String userId)throws BadRequestException{
 		//validate existence of the user
-		User user = userService.getUserById(userId);	//throws bad request exception of user doesn't exist
+		userService.getUserById(userId);	//throws bad request exception of user doesn't exist
 	}
 }
