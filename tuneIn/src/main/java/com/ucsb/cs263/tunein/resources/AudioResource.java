@@ -94,7 +94,7 @@ public class AudioResource {
     @Context HttpServletResponse response) throws IOException{
 	  //verify user exists
 	  User user  = userService.getUserById(userId); //will throw bad request if user  doesnt exists
-	  String callbackURL="/rest/users/"+user.getUserId()+"/audioClips";
+	  String callbackURL="/rest/users/"+userId+"/audioClips";
 	  return blobstoreService.createUploadUrl(callbackURL);
   }
 
