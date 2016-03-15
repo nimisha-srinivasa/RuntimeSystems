@@ -22,7 +22,7 @@ public class UserService{
 	
 	public String addNewUser(User user){
 		
-		Entity userEntity = new Entity(TuneInConstants.USER_TYPE);
+		Entity userEntity = new Entity(TuneInConstants.USER_TYPE, user.getUserId());
 		userEntity.setProperty(TuneInConstants.USER_ID, user.getUserId());
 		userEntity.setProperty(TuneInConstants.USER_FIRST_NAME, user.getFirstName());
 		userEntity.setProperty(TuneInConstants.USER_LAST_NAME, user.getLastName());
@@ -42,7 +42,7 @@ public class UserService{
 		    
 		    
 		    for (Entity result : pq.asIterable()) {
-		    	user = new User((String)result.getProperty(TuneInConstants.USER_ID), 
+		    	user = new User(KeyFactory.keyToString(result.getKey()),
 		    			(String)result.getProperty(TuneInConstants.USER_FIRST_NAME), 
 		    			(String)result.getProperty(TuneInConstants.USER_LAST_NAME), 
 		    			(String)result.getProperty(TuneInConstants.USER_DISPLAY_NAME), 
