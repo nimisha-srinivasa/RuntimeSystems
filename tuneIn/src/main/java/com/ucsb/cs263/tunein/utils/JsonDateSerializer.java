@@ -11,6 +11,11 @@ import java.util.Date;
 
 public class JsonDateSerializer extends StdSerializer<Date> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public JsonDateSerializer() {
 	    super(Date.class, true);
 	}

@@ -6,7 +6,8 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -24,12 +25,15 @@ import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.ucsb.cs263.tunein.model.AudioClip;
 import com.ucsb.cs263.tunein.model.AudioClipInstance;
+import com.ucsb.cs263.tunein.model.User;
 import com.ucsb.cs263.tunein.service.AudioClipService;
+import com.ucsb.cs263.tunein.service.UserService;
 
 @Path("/users/{userId}/audioClips")
 public class AudioResource {
@@ -38,27 +42,36 @@ public class AudioResource {
   @Context
   Request request;
 
-  private AudioClipService audioClipService = new AudioClipService();;
+  private AudioClipService audioClipService = new AudioClipService();
+  private UserService userService = new UserService();
   private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
   
 
   @GET
   @Path("/others")
   @Produces(MediaType.APPLICATION_JSON )
-  public List<AudioClipInstance> getAllAudioClips(@PathParam("userId") String userId) throws IOException{
-    return audioClipService.getAllAudioClips(userId);
+  public List<AudioClipInstance> getAllAudioClips(@PathParam("userId") String userId) throws IOException, BadRequestException{
+	  List<AudioClipInstance> audioClipList = new ArrayList<AudioClipInstance>();
+	  audioClipList = audioClipService.getOtherUsersAudioClips(userId);
+    return audioClipList;
   }
 
   @GET
   @Path("/{id}")
   @Produces(MediaType.APPLICATION_JSON )
-  public AudioClip getAudioClip(@PathParam("id") String id) throws IOException{
-      return audioClipService.getAudioClip(id);
+  public AudioClip getAudioClipById(@PathParam("id") String id) throws IOException{
+	  AudioClip audioClip = null;
+	  try{
+		  audioClip  = audioClipService.getAudioClipById(id);
+	  }catch(Exception e){
+		  throw new BadRequestException();
+	  }
+      return audioClip;
   }
   
   @GET
   @Produces(MediaType.APPLICATION_JSON )
-  public List<AudioClip> getAudioClipsByUser(@PathParam("userId") String userId) throws IOException{
+  public List<AudioClip> getAudioClipsByUser(@PathParam("userId") String userId) throws IOException, BadRequestException{
       return audioClipService.getAudioClipsByUser(userId);
     
   }
@@ -79,8 +92,10 @@ public class AudioResource {
   public String getBlobUploadURL(
     @PathParam("userId") String userId,
     @Context HttpServletResponse response) throws IOException{
-      String callbackURL="/rest/users/"+userId+"/audioClips";
-      return blobstoreService.createUploadUrl(callbackURL);
+	  //verify user exists
+	  User user  = userService.getUserById(userId); //will throw bad request if user  doesnt exists
+	  String callbackURL="/rest/users/"+user.getUserId()+"/audioClips";
+	  return blobstoreService.createUploadUrl(callbackURL);
   }
 
   @GET
@@ -92,10 +107,10 @@ public class AudioResource {
       blobstoreService.serve(blob_key,response);
       return Response.ok().build();
   }
-
+  
   @POST
   @Consumes(MediaType.MULTIPART_FORM_DATA)
-  public Response newAudioClip(@Context HttpServletRequest request,
+  public Response newAudioClipFromForm(@Context HttpServletRequest request,
     @Context HttpServletResponse response) throws IOException, URISyntaxException{
       Map<String, BlobKey> blobs = blobstoreService.getUploadedBlobs(request);
       BlobKey audio_blobKey = blobs.get("myAudio");
@@ -104,6 +119,15 @@ public class AudioResource {
       String audioclip_key = audioClipService.newAudioClip(userId, request.getParameter("title"), 
     		  audio_blobKey.getKeyString(), image_blobKey.getKeyString());
       return Response.seeOther(new URI("/success.html?audioclip_key="+audioclip_key+"&userId="+userId)).build();
+  }
+  
+  @POST
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.TEXT_PLAIN)
+  public String newAudioClipFromJson(AudioClip audioClip, @PathParam("userId") String userId) throws IOException, URISyntaxException{
+	  String newKey  = audioClipService.newAudioClip(userId, audioClip.getTitle(), 
+			  audioClip.getAudioId(), audioClip.getImageId());
+	  return newKey;
   }
 
   @DELETE
@@ -131,6 +155,22 @@ public class AudioResource {
   @PUT 
   public void updateAudioClip() {
 	  /* TODO */
+  }
+  
+  //memcache only endpoints
+  @POST
+  @Path("/memcache")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public void newAudioClipInMemcache(@PathParam("userId") String ownerId, AudioClip audioClip) throws IOException, URISyntaxException{
+	  audioClipService.newAudioClipInMemcache(ownerId, audioClip);
+	  return ;
+  }
+  
+  @GET
+  @Path("/memcache")
+  @Produces(MediaType.APPLICATION_JSON )
+  public List<AudioClip> getAudioClipInMemcache() throws IOException, BadRequestException{
+      return audioClipService.getAudioClipInMemcache();
   }
 
 } 
