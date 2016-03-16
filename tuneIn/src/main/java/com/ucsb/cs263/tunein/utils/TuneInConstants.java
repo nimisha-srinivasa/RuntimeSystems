@@ -20,4 +20,5 @@ public class TuneInConstants {
 	
 	//memcache related keys
 	public static final String ALL_AUDIO_CLIPS = "ALL_AUDIOCLIPS";
+	public static final String OTHERS_WORK_KEY = "OTHERS_";
 }
