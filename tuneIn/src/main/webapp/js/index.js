@@ -65,7 +65,7 @@ function getMyPreviousWork(){
                     $.each(data, function(i, item) {
                         image_url = basic_url+"/image?blobkey="+item.imageId;
                         audio_url = basic_url+"/audio?blobkey="+item.audioId;
-                        delete_button = '<button class="btn btn-primary" value="'+item.keyname+'" onclick="deleteAudioClip(this)"><i class="fa fa-times"></i>Delete Audio</button>';
+                        delete_button = '<button class="btn btn-danger" value="'+item.keyname+'" onclick="deleteAudioClip(this)"><i class="fa fa-times"></i>Delete Audio</button>';
                         $("#myPrevWork").before("<li> <div class=\"timeline-image\"><img class=\"timeline_audio_image img-circle img-responsive\" src=\""+image_url+"\" alt=\"Audio Clip\"></div><div class=\"timeline-panel\"><div class=\"timeline-heading\"><h4>"+item.title+"</h4><h4 class=\"subheading\">"+item.date+"</h4></div><div class=\"timeline-body\"><p class=\"text-muted\"><audio controls> <source src=\""+audio_url+"\" type=\"audio/mpeg\" /></audio></p><div><br/><br/>"+delete_button+"</div></div></div></li>");
                     });
                 },
@@ -107,6 +107,7 @@ function deleteAudioClip(btn){
         crossDomain: true,
         success: function (data) {
         	alert("delete successful");
+        	location.reload();
         },
         error: function (xhr, status) {
             alert("error");
